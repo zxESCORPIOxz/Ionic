@@ -1,0 +1,26 @@
+ion-content{
+    padding: 10px;
+}
+
+.msjerror{
+    margin: 0 10px 0 10px;
+    background-color: yellow;
+    color: black;
+    text-align: center;
+}
+
+ion-item{
+    margin: 10px;
+}
+ion-button{
+  margin: 15px auto 15px auto;
+  width: 80%;
+  --background: red;
+}
+ion-avatar {
+  width: 150px;
+  background-color: black;
+  height: 150px;
+  align-self: center;
+}
+

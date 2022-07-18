@@ -1,0 +1,69 @@
+  ion-button {
+    --background: red;
+    --color: rgb(255, 255, 255);
+  }
+
+  ion-avatar {
+    width: 200px;
+    height: 200px;
+    align-self: center;
+  }
+
+  ion-slides {
+    margin: 20px 20px 0 20px;
+    height: 100%;
+    background-color: black;
+    max-width: 800px;
+  }
+  
+  .swiper-slide {
+    display: block;
+    margin-bottom: 0;
+    background-color: var(--slide-color-background); //variable creada
+  }
+
+  h1 {
+    width: 95%;
+    background-color: red;
+    font-size: 30px;
+  }
+
+  h2 {
+    width: 80%;
+    font-size: 20px;
+  }
+  
+  ion-slide > center {
+    display: flex;
+    flex-direction: column;
+  }
+
+  ion-slide > center > h1 , h2 {
+    margin: 20px 20px 20px 20px;
+    color: var(--texto-slide);
+    border-color: white;
+    border-style: inset;
+    align-self: center;
+  }
+  
+  ion-slide > center > p {
+    font-style: italic;
+    font-size: 18px;
+    padding: 20px 20px 20px 20px;
+    border-color: white;
+    border-style: dashed double none;
+  }
+  
+  ion-slide > center > ion-icon {
+    color: red;
+    font-size: 50px;
+    align-self: center;
+  }
+  
+  ion-slide > center > ion-icon[name="log-in"]{
+    
+    align-self: flex-end;
+    color: white;
+    font-size: 40px;
+  }
+  
