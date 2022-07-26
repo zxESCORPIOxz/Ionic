@@ -1,8 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { AuthenticateService } from '../services/authenticate.service';
 import { Storage } from '@ionic/storage';
+import { AuthenticateService } from '../services/authenticate.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +14,9 @@ import { Storage } from '@ionic/storage';
 
 export class RegisterPage implements OnInit {
   registerForm: FormGroup;
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+  registerResult: boolean = true;
+  errMessage;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   validation_messages = {
     nombre: [
@@ -38,6 +43,7 @@ export class RegisterPage implements OnInit {
   errorMessage: any;
 
   constructor(
+    private alertController: AlertController,
     private formBuilder: FormBuilder,
     private navCtrl: NavController,
     private storage: Storage,
@@ -46,7 +52,7 @@ export class RegisterPage implements OnInit {
     this.registerForm = this.formBuilder.group({
       nombre: new FormControl(
         '',
-        Validators.compose([
+          Validators.compose([
           Validators.required,
           Validators.maxLength(40),
           Validators.pattern('^[a-zA-Z]+$')
@@ -82,13 +88,31 @@ export class RegisterPage implements OnInit {
   }
 
   register(registerFormValues) {
-    this.authService.registerUser(registerFormValues).then(() => {
+    this.authService.registerUser(registerFormValues).then( (data) => {
+      this.errMessage = '';
       this.navCtrl.navigateBack('/login');
+    }).catch( err => {
+      this.presentAlert('Opps', 'Hubo un error', err);
     });
   }
 
+  async presentAlert(header, subHeader,message) {
+    const alert = await this.alertController.create({
+      // eslint-disable-next-line object-shorthand
+      header: header,
+      // eslint-disable-next-line object-shorthand
+      subHeader: subHeader,
+      // eslint-disable-next-line object-shorthand
+      message: message,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
   goToLogin() {
-    this.navCtrl.navigateBack('/login');
+    this.navCtrl.navigateBack('/login').then((resp) => {
+      console.log(resp);
+    })
   }
 
 }

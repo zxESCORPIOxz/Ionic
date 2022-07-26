@@ -1,36 +1,72 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticateService {
 
-  constructor(private storage: Storage) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  header = {'Access-Control-Request-Headers': '*',  'Content-Type': 'application/json'};
+
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  url_server = 'https://music-back-seminario.herokuapp.com/';
+  httpOptions = {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    headers: new HttpHeaders({ 'Content-Type': 'application/json', observe: 'response' })
+  };
+
+  constructor(private storage: Storage, private http: HttpClient) {
     this.storage.create();
   }
 
   loginUser(credentials) {
+    // eslint-disable-next-line prefer-const
+    let params = {
+      // eslint-disable-next-line quote-props
+      'user': credentials
+    };
     return new Promise((accept, reject) => {
-      this.storage.get('user').then((data) => {
-        data.password = atob(data.password);
-        if (
-          // eslint-disable-next-line eqeqeq
-          credentials.email == data.email &&
-          // eslint-disable-next-line eqeqeq
-          credentials.password == data.password
-        ) {
-          accept('Login Exitoso');
+      this.http.post(`${this.url_server}login`, params, this.httpOptions)
+      .subscribe((data: any) => {
+        // eslint-disable-next-line eqeqeq
+        if ( data.status == 'OK') {
+          accept(data);
         } else {
-          reject('Login Fallido');
+          reject('Email o Contraseña Invalida');
         }
-      }).catch( err => reject('Fallo en el Login'));
+      },
+      (error) => {
+        reject('Error en la peticion');
+      }
+      );
     });
   }
 
   registerUser(userData) {
-    userData.password = btoa(userData.password);
-    //atoa() funcion para desencriptar
-    return this.storage.set('user', userData);
+    //userData.password = btoa(userData.password);
+    //return this.storage.set('user', userData)
+    // eslint-disable-next-line prefer-const
+    let params = {
+      // eslint-disable-next-line quote-props
+      'user': userData
+    };
+    return new Promise ((accept, reject) => {
+      this.http.post(`${this.url_server}signup`, params, this.httpOptions).subscribe((data: any) => {
+        // eslint-disable-next-line no-cond-assign, eqeqeq
+        if (data.status == 'OK') {
+          accept(data.msg);
+        }else{
+          reject(data.errors);
+        }
+      },
+      (error) => {
+        reject('Error en la peticion');
+      }
+      );
+      });
   }
 
 }

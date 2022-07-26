@@ -1,15 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="ion-text-center">Login</ion-title>
+    <ion-title class="ion-text-center">login</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <center>
-    <ion-avatar>
-      <img src="assets/images/user.jpg"/>
-    </ion-avatar>
-  </center>
+
   <form [formGroup]="loginForm" (ngSubmit)="loginUser(loginForm.value)">
 
     <ion-item>
@@ -17,7 +13,7 @@
       <ion-input formControlName="email"></ion-input>
     </ion-item>
 
-    <div class="msjerror">
+    <div>
       <ng-container *ngFor="let validation of validation_messages.email">
        <div 
         *ngIf="
@@ -34,30 +30,15 @@
       <ion-label position="floating">Contraseña</ion-label>
       <ion-input formControlName="password"></ion-input>
     </ion-item>
-
-    <div class="msjerror">
-      <ng-container *ngFor="let validation of validation_messages.password">
-       <div name="errorMessage"
-        *ngIf="
-          loginForm.get('password').hasError(validation.type) && 
-          (loginForm.get('password').dirty || 
-          loginForm.get('password').touched)
-        ">
-        {{validation.message}}
-       </div>
-      </ng-container>
-    </div>
-
     <ion-button
         expand="full"
         shape="round"
+        color="success"
         [disabled]="!loginForm.valid"
         type="submit"
       >Login</ion-button>
   </form>
-  <div class="msjerror">
-    {{errorMessage}}
-  </div>
+  {{errorMessage}}
 
 </ion-content>
 
@@ -65,6 +46,7 @@
     <ion-button
     expand="full"
     shape="round"
+    color="success"
     (click)="goToRegister()"
   >Resgistrate</ion-button>
 </ion-footer>
